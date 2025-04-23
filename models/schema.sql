@@ -25,7 +25,7 @@ CREATE TABLE "companies" (
   "address" VARCHAR(100) NOT NULL,
   "phone_number" VARCHAR(20),
   "email" VARCHAR(100) CHECK (email LIKE '%@%'),
-  "has_f_skatt" BOOLEAN NOT NULL DEFAULT FALSE
+  "has_f_skatt" BOOLEAN NOT NULL DEFAULT TRUE
 );
 
 -- Employees table

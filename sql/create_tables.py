@@ -1,5 +1,5 @@
 import psycopg2
-from config import (
+from scripts.config import (
     POSTGRES_HOST,
     POSTGRES_PORT,
     POSTGRES_USER,
