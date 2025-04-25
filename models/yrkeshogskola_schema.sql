@@ -1,5 +1,4 @@
-
--- === Roles table ===
+-- Roles table
 CREATE TABLE "roles"
 (
   "role_id" SERIAL,
@@ -7,7 +6,7 @@ CREATE TABLE "roles"
   PRIMARY KEY ("role_id")
 );
 
--- === Employees table (teachers, consultants, education managers, etc.) ===
+-- Employees table (teachers, consultants, education managers, etc.)
 CREATE TABLE "employees"
 (
   "employee_id" SERIAL,
@@ -21,7 +20,7 @@ CREATE TABLE "employees"
       REFERENCES "roles"("role_id")
 );
 
--- === Employees table (Private information) ===
+-- Employees table (Private information)
 CREATE TABLE "employee_private"
 (
   "employee_id" INTEGER,
@@ -32,7 +31,7 @@ CREATE TABLE "employee_private"
   PRIMARY KEY ("employee_id")
 );
 
--- === Students table (General information) ===
+-- Students table (General information)
 CREATE TABLE "students"
 (
   "student_id" SERIAL,
@@ -41,7 +40,7 @@ CREATE TABLE "students"
   PRIMARY KEY ("student_id")
 );
 
--- === Students table (Private information) ===
+-- Students table (Private information)
 CREATE TABLE "student_private"
 (
   "student_id" INTEGER,
@@ -52,7 +51,7 @@ CREATE TABLE "student_private"
   PRIMARY KEY ("student_id")
 );
 
--- === Educational programs table ===
+-- Educational programs table
 CREATE TABLE "programs"
 (
   "program_id" SERIAL,
@@ -65,7 +64,7 @@ CREATE TABLE "programs"
   PRIMARY KEY ("program_id")
 );
 
--- === Campuses table ===
+-- Campuses table
 CREATE TABLE "campus"
 (
   "campus_id" SERIAL,
@@ -76,7 +75,7 @@ CREATE TABLE "campus"
   PRIMARY KEY ("campus_id")
 );
 
--- === Courses table ===
+-- Courses table
 CREATE TABLE "courses"
 (
   "course_id" SERIAL,
@@ -88,7 +87,7 @@ CREATE TABLE "courses"
   PRIMARY KEY ("course_id")
 );
 
--- === Bridge-table showing what course is part of the program ===
+-- Bridge-table showing what course is part of the program
 CREATE TABLE "program_course"
 (
   "program_id" INTEGER,
@@ -102,7 +101,7 @@ CREATE TABLE "program_course"
       REFERENCES "courses"("course_id")
 );
 
--- === Companies table ===
+-- Companies table
 CREATE TABLE "companies"
 (
   "company_id" SERIAL,
@@ -115,7 +114,7 @@ CREATE TABLE "companies"
   PRIMARY KEY ("company_id")
 );
 
--- === Contracts table (includes company, consultant and campus) ===
+-- Contracts table (includes company, consultant and campus)
 CREATE TABLE "contracts"
 (
   "contract_id" SERIAL,
@@ -137,7 +136,7 @@ CREATE TABLE "contracts"
       REFERENCES "campus"("campus_id")
 );
 
--- === Classes table ===
+-- Classes table
 CREATE TABLE "classes"
 (
   "class_id" SERIAL,
@@ -158,7 +157,7 @@ CREATE TABLE "classes"
       REFERENCES "campus"("campus_id")
 );
 
--- === Bridge-table showing students in classes ===
+-- Bridge-table showing students in classes
 CREATE TABLE "class_student"
 (
   "class_id" INTEGER,
@@ -172,7 +171,7 @@ CREATE TABLE "class_student"
       REFERENCES "students"("student_id")
 );
 
--- === Teaching assignements table (Includes course, class and teacher) ===
+-- Teaching assignements table (Includes course, class and teacher)
 CREATE TABLE "teaching_assignments"
 (
   "assignment_id" SERIAL,
@@ -193,57 +192,33 @@ CREATE TABLE "teaching_assignments"
       REFERENCES "employees"("employee_id")
 );
 
-
-
-
--- === Limit: max 3 classes per education manager ===
-CREATE OR REPLACE FUNCTION check_max_classes
-()
+-- Limit: max 3 classes per education manager
+CREATE OR REPLACE FUNCTION check_max_classes()
 RETURNS TRIGGER AS $$
-DECLARE
-  class_count INT;
 BEGIN
-  SELECT COUNT(*)
-  INTO class_count
-  FROM classes
-  WHERE education_manager_id = NEW.education_manager_id;
-
-  IF class_count >= 3 THEN
-    RAISE EXCEPTION 'Education manager (ID=%) already manages 3 classes', NEW.education_manager_id;
-END
-IF;
-
+  IF (SELECT COUNT(*) FROM classes 
+      WHERE education_manager_id = NEW.education_manager_id) >= 3 THEN
+    RAISE EXCEPTION 'Education manager (ID=%) already manages 3 classes';
+  END IF;
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER trg_check_max_classes
-BEFORE
-INSERT ON
-classes
-FOR
-EACH
-ROW
-EXECUTE FUNCTION check_max_classes
-();
+BEFORE INSERT ON classes
+FOR EACH ROW EXECUTE FUNCTION check_max_classes();
 
--- === Restriction: the program must be valid for exactly 3 years ===
-CREATE OR REPLACE FUNCTION check_program_duration
-()
+-- Restriction: the program must be valid for exactly 3 years
+CREATE OR REPLACE FUNCTION check_program_duration()
 RETURNS TRIGGER AS $$
 BEGIN
   IF NEW.valid_to <> NEW.valid_from + INTERVAL '3 years' THEN
     RAISE EXCEPTION 'Program must be valid for exactly 3 years';
-END
-IF;
+  END IF;
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER trg_check_program_duration
-BEFORE
-INSERT OR
-UPDATE ON programs
-FOR EACH ROW
-EXECUTE FUNCTION check_program_duration
-();
+BEFORE INSERT ON programs
+FOR EACH ROW EXECUTE FUNCTION check_program_duration();
