@@ -33,3 +33,5 @@ CREATE TRIGGER trg_check_program_duration
 BEFORE INSERT ON programs
 FOR EACH ROW
 EXECUTE FUNCTION check_program_duration();
+
+
