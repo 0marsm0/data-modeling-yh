@@ -21,10 +21,11 @@ EXECUTE FUNCTION check_max_classes();
 CREATE OR REPLACE FUNCTION check_program_duration()
 RETURNS TRIGGER AS $$
 BEGIN
-  IF NEW.valid_to <> NEW.valid_from + INTERVAL '3 years' THEN
-    RAISE EXCEPTION 'Program must be valid for exactly 3 years';
-  END IF;
-  RETURN NEW;
+    IF (NEW.valid_to - NEW.valid_from) BETWEEN 1095 - 30 AND 1095 + 30 THEN
+        RETURN NEW;
+    ELSE
+        RAISE EXCEPTION 'Program must be valid for 3 years';
+    END IF;
 END;
 $$ LANGUAGE plpgsql;
 

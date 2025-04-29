@@ -1,50 +1,50 @@
 -- Roles table
-CREATE TABLE "roles" (
+CREATE TABLE IF NOT EXISTS "roles" (
   "role_id" SERIAL PRIMARY KEY,
   "role_name" VARCHAR(100) NOT NULL
 );
 
 -- Employees table (teachers, consultants, education managers, etc.)
-CREATE TABLE "employees" (
+CREATE TABLE IF NOT EXISTS "employees" (
   "employee_id" SERIAL PRIMARY KEY,
   "first_name" VARCHAR(50) NOT NULL,
   "last_name" VARCHAR(100) NOT NULL,
   "role_id" INTEGER NOT NULL,
-  "is_consultant" BOOLEAN NOT NULL,
+  "is_consultant" BOOLEAN NOT NULL DEFAULT FALSE,
   CONSTRAINT "FK_employees.role_id"
     FOREIGN KEY ("role_id") REFERENCES "roles"("role_id")
 );
 
 -- Employees (Private information)
-CREATE TABLE "employee_private" (
+CREATE TABLE IF NOT EXISTS "employee_private" (
   "employee_id" INTEGER PRIMARY KEY,
-  "personal_number" VARCHAR(20) NOT NULL,
+  "personal_number" VARCHAR(20) NOT NULL UNIQUE,
   "address" VARCHAR(100) NOT NULL,
   "email_private" VARCHAR(100) NOT NULL,
   "phone_number" VARCHAR(20) NOT NULL
 );
 
 -- Students (General)
-CREATE TABLE "students" (
+CREATE TABLE IF NOT EXISTS "students" (
   "student_id" SERIAL PRIMARY KEY,
   "first_name" VARCHAR(50) NOT NULL,
   "last_name" VARCHAR(100) NOT NULL
 );
 
 -- Students (Private)
-CREATE TABLE "student_private" (
+CREATE TABLE IF NOT EXISTS "student_private" (
   "student_id" INTEGER PRIMARY KEY,
-  "personal_number" VARCHAR(20) NOT NULL,
+  "personal_number" VARCHAR(20) NOT NULL UNIQUE,
   "address" VARCHAR(100) NOT NULL,
   "email_private" VARCHAR(100) NOT NULL,
   "phone_number" VARCHAR(20) NOT NULL
 );
 
 -- Educational programs
-CREATE TABLE "programs" (
+CREATE TABLE IF NOT EXISTS "programs" (
   "program_id" SERIAL PRIMARY KEY,
   "program_name" VARCHAR(100) NOT NULL,
-  "program_code" VARCHAR(10) NOT NULL,
+  "program_code" VARCHAR(10) NOT NULL UNIQUE,
   "credits" INTEGER NOT NULL,
   "description" TEXT,
   "valid_from" DATE NOT NULL,
@@ -52,7 +52,7 @@ CREATE TABLE "programs" (
 );
 
 -- Campuses
-CREATE TABLE "campus" (
+CREATE TABLE IF NOT EXISTS "campus" (
   "campus_id" SERIAL PRIMARY KEY,
   "location" VARCHAR(100) NOT NULL,
   "address" VARCHAR(100) NOT NULL,
@@ -61,17 +61,17 @@ CREATE TABLE "campus" (
 );
 
 -- Courses
-CREATE TABLE "courses" (
+CREATE TABLE IF NOT EXISTS "courses" (
   "course_id" SERIAL PRIMARY KEY,
   "course_name" VARCHAR(100) NOT NULL,
-  "course_code" VARCHAR(10) NOT NULL,
+  "course_code" VARCHAR(10) NOT NULL UNIQUE,
   "credits" INTEGER NOT NULL,
   "description" TEXT,
-  "is_standalone" BOOLEAN NOT NULL
+  "is_standalone" BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 -- Bridge: program_course
-CREATE TABLE "program_course" (
+CREATE TABLE IF NOT EXISTS "program_course" (
   "program_id" INTEGER NOT NULL,
   "course_id" INTEGER NOT NULL,
   PRIMARY KEY ("program_id", "course_id"),
@@ -82,10 +82,10 @@ CREATE TABLE "program_course" (
 );
 
 -- Companies
-CREATE TABLE "companies" (
+CREATE TABLE IF NOT EXISTS "companies" (
   "company_id" SERIAL PRIMARY KEY,
   "company_name" VARCHAR(100) NOT NULL,
-  "organization_number" VARCHAR(20) NOT NULL,
+  "organization_number" VARCHAR(20) NOT NULL UNIQUE,
   "address" VARCHAR(100) NOT NULL,
   "phone_number" VARCHAR(20) NOT NULL,
   "email" VARCHAR(100) NOT NULL,
@@ -93,14 +93,14 @@ CREATE TABLE "companies" (
 );
 
 -- Contracts
-CREATE TABLE "contracts" (
+CREATE TABLE IF NOT EXISTS "contracts" (
   "contract_id" SERIAL PRIMARY KEY,
   "employee_id" INTEGER NOT NULL,
   "company_id" INTEGER NOT NULL,
   "campus_id" INTEGER NOT NULL,
   "start_date" DATE NOT NULL,
   "end_date" DATE NOT NULL,
-  "hourly_rate" DECIMAL NOT NULL,
+  "hourly_rate" DECIMAL(10,2) NOT NULL,
   CONSTRAINT "FK_contracts.employee_id"
     FOREIGN KEY ("employee_id") REFERENCES "employees"("employee_id"),
   CONSTRAINT "FK_contracts.company_id"
@@ -110,11 +110,11 @@ CREATE TABLE "contracts" (
 );
 
 -- Classes
-CREATE TABLE "classes" (
+CREATE TABLE IF NOT EXISTS "classes" (
   "class_id" SERIAL PRIMARY KEY,
   "class_name" VARCHAR(20) NOT NULL,
   "education_manager_id" INTEGER NOT NULL,
-  "program_id" INTEGER NOT NULL,
+  "program_id" INTEGER,
   "campus_id" INTEGER NOT NULL,
   "capacity" INTEGER NOT NULL,
   CONSTRAINT "FK_classes.education_manager_id"
@@ -126,7 +126,7 @@ CREATE TABLE "classes" (
 );
 
 -- Bridge: class_student
-CREATE TABLE "class_student" (
+CREATE TABLE IF NOT EXISTS "class_student" (
   "class_id" INTEGER NOT NULL,
   "student_id" INTEGER NOT NULL,
   PRIMARY KEY ("class_id", "student_id"),
@@ -137,7 +137,7 @@ CREATE TABLE "class_student" (
 );
 
 -- Teaching assignments
-CREATE TABLE "teaching_assignments" (
+CREATE TABLE IF NOT EXISTS "teaching_assignments" (
   "assignment_id" SERIAL PRIMARY KEY,
   "course_id" INTEGER NOT NULL,
   "class_id" INTEGER NOT NULL,

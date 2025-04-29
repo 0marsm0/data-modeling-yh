@@ -24,7 +24,9 @@ INSERT INTO employees (first_name, last_name, role_id, is_consultant) VALUES
 ('Oskar', 'Nyström', 1, true),
 ('Petra', 'Holm', 2, false),
 ('Quentin', 'Sjöberg', 5, true),
-('Rebecca', 'Ström', 1, false);
+('Rebecca', 'Ström', 1, false),
+('Eva', 'Berg', 2, false),
+('Ahmed', 'Alkhateeb', 2, false);
 
 
 INSERT INTO employee_private (employee_id, personal_number, address, email_private, phone_number) VALUES
@@ -40,12 +42,14 @@ INSERT INTO employee_private (employee_id, personal_number, address, email_priva
 (10, '19841010-0123', 'Drottninggatan 28, 411 07 Göteborg', 'jonas.ek@private.com', '0701010101'),
 (11, '19851111-1234', 'Södra Vägen 8, 412 54 Göteborg', 'karin.wikstrom@private.com', '0701212121'),
 (12, '19861212-2345', 'Chalmersgatan 5, 412 51 Göteborg', 'lars.akesson@private.com', '0701313131'),
-(13, '19871313-3456', 'Linnégatan 22, 413 08 Göteborg', 'maria.lund@private.com', '0701414141'),
-(14, '19881414-4567', 'Viktoriagatan 8, 411 25 Göteborg', 'nils.borg@private.com', '0701515151'),
-(15, '19891515-5678', 'Nordstan 5, 411 06 Göteborg', 'oskar.nystrom@private.com', '0701616161'),
-(16, '19901616-6789', 'Kungsportsavenyen 15, 411 36 Göteborg', 'petra.holm@private.com', '0701717171'),
-(17, '19911717-7890', 'Östra Hamngatan 22, 411 10 Göteborg', 'quentin.sjoberg@private.com', '0701818181'),
-(18, '19921818-8901', 'Vasagatan 18, 411 24 Göteborg', 'rebecca.strom@private.com', '0701919191');
+(13, '19871013-3456', 'Linnégatan 22, 413 08 Göteborg', 'maria.lund@private.com', '0701414141'),
+(14, '19881114-4567', 'Viktoriagatan 8, 411 25 Göteborg', 'nils.borg@private.com', '0701515151'),
+(15, '19890515-5678', 'Nordstan 5, 411 06 Göteborg', 'oskar.nystrom@private.com', '0701616161'),
+(16, '19900216-6789', 'Kungsportsavenyen 15, 411 36 Göteborg', 'petra.holm@private.com', '0701717171'),
+(17, '19911017-7890', 'Östra Hamngatan 22, 411 10 Göteborg', 'quentin.sjoberg@private.com', '0701818181'),
+(18, '19921118-8901', 'Vasagatan 18, 411 24 Göteborg', 'rebecca.strom@private.com', '0701919191'),
+(19, '19920426-8915', 'Stadingeplan 10, 172 14 Spånga', 'eva.berg@private.com', '0767676766'),
+(20, '19820203-7701', 'Lofotengatan 18, 164 33 Kista', 'ali.alkhateeb@private.com', '0767788555');
 
 
 INSERT INTO students (first_name, last_name) VALUES
@@ -216,11 +220,11 @@ INSERT INTO student_private (student_id, personal_number, address, email_private
 
 INSERT INTO programs (program_name, program_code, credits, description, valid_from, valid_to) VALUES
 ('Software Engineering', 'SE101', 400, 'Fullstack development and software architecture', '2023-08-01', '2026-07-31'),
-('Data Science', 'DS202', 400, 'Machine learning, data mining, and AI', '2022-08-01', '2025-07-31'),
-('Network Security', 'NS303', 400, 'Cybersecurity and infrastructure protection', '2023-01-01', '2026-12-31'),
-('UX/UI Design', 'UX404', 300, 'Digital design, prototyping and research', '2021-09-01', '2024-08-31'),
-('Cloud Computing', 'CC505', 350, 'AWS, Azure, DevOps and automation', '2022-01-01', '2025-12-31'),
-('Mobile App Development', 'MAD606', 400, 'iOS, Android, Flutter and backend integration', '2023-09-01', '2026-08-31');
+('Data Science', 'DS202', 400, 'Machine learning, data mining, and AI', '2023-08-01', '2026-07-31'),
+('Network Security', 'NS303', 400, 'Cybersecurity and infrastructure protection', '2023-08-01', '2026-07-31'),
+('UX/UI Design', 'UX404', 300, 'Digital design, prototyping and research', '2023-08-01', '2026-07-31'),
+('Cloud Computing', 'CC505', 350, 'AWS, Azure, DevOps and automation', '2023-08-01', '2026-07-31'),
+('Mobile App Development', 'MAD606', 400, 'iOS, Android, Flutter and backend integration', '2023-08-01', '2026-07-31');
 
 
 INSERT INTO campus (location, address, phone_number, email) VALUES
@@ -323,13 +327,13 @@ INSERT INTO classes (class_name, education_manager_id, program_id, campus_id, ca
 ('UX404', 3, 4, 1, 15),
 ('NS303', 8, 3, 2, 22),
 ('CC505', 8, 5, 2, 18),
-('MAD23', 8, 6, 2, 20),
-('SE102', 16, 1, 1, 25),
+('MAD23', 16, 6, 2, 20),
+('SE102', 19, 1, 1, 25),
 ('MAD24', 16, 6, 2, 20),
-('UX405', 16, 4, 1, 15),
-('IP101', 3, NULL, 1, 30),
+('UX405', 20, 4, 1, 15),
+('IP101', 19, NULL, 1, 30),
 ('DO401', 8, NULL, 2, 15),
-('EH602', 16, NULL, 1, 12);
+('EH602', 20, NULL, 1, 12);
 
 
 INSERT INTO class_student (class_id, student_id) VALUES
