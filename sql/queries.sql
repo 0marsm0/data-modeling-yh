@@ -1,6 +1,11 @@
 -- Adds a new campus located in Uppsala, Sweden
 INSERT INTO campus (location, address, phone_number, email)
-VALUES ('Uppsala', 'Drottninggatan 7, Uppsala', '018123456', 'uppsala@yh.se');
+VALUES ('Uppsala', 'Drottninggatan 7, 753 10 Uppsala', '018123456', 'uppsala@yh.se');
+
+SELECT
+    campus_id, location, address
+FROM
+    campus;
 
 
 -- Shows each program with the number of courses assigned to it
@@ -16,7 +21,7 @@ ORDER BY
     "Number of courses" DESC;
 
 
--- Show each student and the class they are enrolled in
+-- Shows each student and the class they are enrolled in
 SELECT 
   s.first_name || ' ' || s.last_name AS "Student",
   cl.class_name AS "Class"
@@ -36,7 +41,7 @@ SELECT
 FROM teaching_assignments ta
 JOIN employees e ON ta.employee_id = e.employee_id
 GROUP BY e.employee_id, e.first_name, e.last_name
-ORDER BY "Количество курсов" DESC;
+ORDER BY "Number of courses" DESC;
 
 
 -- Instructors teaching more than 2 courses
