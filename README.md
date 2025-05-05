@@ -101,7 +101,3 @@ The presentation materials can be found in the `/reports` directory and include 
 ## 👥 Authors
 
 - [Alisher Yuldashev]
-
-## 📄 License
-
-This project is for academic use only.
